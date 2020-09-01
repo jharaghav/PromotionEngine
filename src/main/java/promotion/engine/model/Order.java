@@ -13,5 +13,4 @@ public class Order {
 
     Map<CategoryPriceConstants, Integer> categoryQuantities = new HashMap<>();
 
-
 }

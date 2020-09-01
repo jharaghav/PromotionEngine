@@ -20,10 +20,8 @@ public class PriceCalculationServiceImpl implements PriceCalculationService {
         for (Map.Entry<CategoryPriceConstants, Integer> entry : categoryQuantities.entrySet()) {
             if (entry.getKey().equals(CategoryPriceConstants.A)) {
                 totalPrice += getPriceForCategoryA(entry.getValue());
-
             } else if (entry.getKey().equals(CategoryPriceConstants.B)) {
                 totalPrice += getPriceForCategoryB(entry.getValue());
-
             } else if (entry.getKey().equals(CategoryPriceConstants.C)) {
                 quantityC = entry.getValue();
             } else if (entry.getKey().equals(CategoryPriceConstants.D)) {
@@ -38,33 +36,14 @@ public class PriceCalculationServiceImpl implements PriceCalculationService {
     public int getPriceForCategoryA(int quantityA) {
         int categoryPriceforA = CategoryPriceConstants.A.categoryPrices;
         int promotionPriceforA = ProductPromotionPriceRules.THREE_A.promotionPrices;
-        int rem = quantityA % 3;
-        int quantityWithoutDiscount = 0;
-        int quantityWithDiscount = 0;
-        if (rem != 0) {
-            quantityWithoutDiscount = rem;
-        }
-        if (quantityA >= 3) {
-            quantityWithDiscount = quantityA / 3;
-        }
-        return (quantityWithDiscount * promotionPriceforA) + (quantityWithoutDiscount * categoryPriceforA);
+        return getTotalPrice(quantityA, categoryPriceforA, promotionPriceforA, 3);
     }
 
     @Override
     public int getPriceForCategoryB(int quantityB) {
         int categoryPriceforB = CategoryPriceConstants.B.categoryPrices;
         int promotionPriceforB = ProductPromotionPriceRules.TWO_B.promotionPrices;
-        int rem = quantityB % 2;
-        int quantityWithoutDiscount = 0;
-        int quantityWithDiscount = 0;
-        if (rem != 0) {
-            quantityWithoutDiscount = rem;
-        }
-        if (quantityB >= 2) {
-            quantityWithDiscount = quantityB / 2;
-        }
-        return (quantityWithDiscount * promotionPriceforB) + (quantityWithoutDiscount * categoryPriceforB);
-
+        return getTotalPrice(quantityB, categoryPriceforB, promotionPriceforB, 2);
     }
 
     @Override
@@ -89,5 +68,18 @@ public class PriceCalculationServiceImpl implements PriceCalculationService {
             return promotionPriceforCandD * quantityD;
         }
         return totalPrice;
+    }
+
+    private int getTotalPrice(int quantity, int categoryPrice, int promotionPrice, int offerQuantity) {
+        int rem = quantity % offerQuantity;
+        int quantityWithoutDiscount = 0;
+        int quantityWithDiscount = 0;
+        if (rem != 0) {
+            quantityWithoutDiscount = rem;
+        }
+        if (quantity >= offerQuantity) {
+            quantityWithDiscount = quantity / offerQuantity;
+        }
+        return (quantityWithDiscount * promotionPrice) + (quantityWithoutDiscount * categoryPrice);
     }
 }
