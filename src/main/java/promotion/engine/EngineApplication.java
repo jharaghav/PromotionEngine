@@ -24,5 +24,4 @@ public class EngineApplication {
         int totalPrice = priceCalculationService.getTotalPrice(order);
         log.info("Total Price : {}", totalPrice);
     }
-
 }
